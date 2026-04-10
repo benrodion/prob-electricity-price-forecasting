@@ -54,7 +54,7 @@ The thesis focuses on forecasting day-ahead electricity prices for Spain and Ger
 
 ## Setup
 
-Before running the scripts, you need to obtain an API key from [ENTSOE](https://transparency.entsoe.eu/) for downloading electricity market data.
+Before running the scripts, you need to obtain an API key from [ENTSOE](https://transparency.entsoe.eu/) for downloading electricity market data. To do so, simply write them an e-mail under transparency@entsoe.eu. It's old-fashioned, but they are fast : )
 
 Create a `.env` file in the `config/` directory (create the directory if it doesn't exist) with your API key:
 ```
