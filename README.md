@@ -81,14 +81,18 @@ The project is structured as a pipeline. Run the scripts in the following order:
    python data/forecasts/point_pred.py
    python data/forecasts/qra.py # CAREFUL: this will take very long. Be sure to check that the setting 'workers=10' does not exceed your devices computing power
    ```
+4. **Postprocessing of Forecasts**:
+   ```bash
+   python data/postprocessing/postprocessing.py # needed to prevent quantile crossing
+   ```
 
-4. **Evaluate Results**:
+5. **Evaluate Results**:
    ```bash
    python tests/lear_eval.py
    python tests/qra_eval.py
    ```
 
-5. **Visualize Results**:
+6. **Visualize Results**:
    ```bash
    python visualization/descriptive_viz.py
    python visualization/point_pred_viz.py
