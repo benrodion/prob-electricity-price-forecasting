@@ -3,6 +3,12 @@ from entsoe import EntsoePandasClient
 from dotenv import load_dotenv
 from pathlib import Path
 import os
+import warnings
+
+# suppress excessive warning printouts
+warnings.filterwarnings("ignore", category=FutureWarning, module="entsoe")
+warnings.filterwarnings("ignore", category=requests.packages.urllib3.exceptions.RequestsDependencyWarning if False else Warning, message="Unable to find acceptable character detection")
+
 
 # set up client
 load_dotenv(dotenv_path=Path(__file__).parents[2] / 'config/.env')
