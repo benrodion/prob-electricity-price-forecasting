@@ -1,3 +1,6 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parents[2]))
 from models.lear.model import  rolling_lear
 from helpers.standardization import reshape_forecast
 from pathlib import Path

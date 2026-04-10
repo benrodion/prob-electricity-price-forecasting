@@ -1,7 +1,7 @@
 # This script adapts the LEAR model from Lago et al.'s (2021) epftoolbox to work my pre-processed data.
 # The original code can be found here: https://github.com/jeslago/epftoolbox/blob/master/epftoolbox/models/_lear.py
 from sklearn.utils._testing import ignore_warnings
-from sklearn.linear_model import LassoLarsIC, Lasso, LinearRegression
+from sklearn.linear_model import LassoLarsIC, LassoCV, Lasso, LinearRegression
 from sklearn.exceptions import ConvergenceWarning
 import numpy as np
 import pandas as pd
@@ -23,8 +23,13 @@ def fit_predict_lear(df_train, df_test_day, feature_cols, target_col):
 
         X_test = df_test_day[df_test_day.index.hour == h][feature_cols].values
 
-        lmbd_model = LassoLarsIC(criterion= 'aic',max_iter=2500)
-        lmbd = lmbd_model.fit(X_train,Y_train).alpha_
+        try:
+            lmbd_model = LassoLarsIC(criterion='aic', max_iter=2500)
+            lmbd = lmbd_model.fit(X_train, Y_train).alpha_
+        except ValueError:
+            # LARS path solver fails on near-collinear features; fall back to CV
+            lmbd_model = LassoCV(cv=5, max_iter=2500)
+            lmbd = lmbd_model.fit(X_train, Y_train).alpha_
         lambdas[h] = lmbd
 
         # this is needed to address a sklearn-warning:
