@@ -100,7 +100,7 @@ The project is structured as a pipeline. Run the scripts in the following order:
    python visualization/qra_viz.py
    ```
 
-Note: Some scripts may take significant time to run, especially model training and forecasting.
+**Note**: Some scripts may take significant time to run, especially data download (around 15-20 min. per script), model training and forecasting (QRA can take multiple hours, depending on your devices computing power).
 
 ## Results
 
