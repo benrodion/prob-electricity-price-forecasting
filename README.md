@@ -21,7 +21,7 @@ The thesis focuses on forecasting day-ahead electricity prices for Spain and Ger
   - `residuals/`: Model residuals and error metrics
   - `qra/`: Quantile regression averaging results
   - `postprocessing/`: Postprocessing of QRA results. Crucial to prevent quantile crossing.
-- `epftoolbox/`: The EPF Toolbox library (submodule or local copy)
+- `epftoolbox/`: **you need to install it following the instructions provided below**
 - `helpers/`: Utility functions for data handling, visualization, etc.
 - `models/`: Model implementations (LEAR, benchmarks)
 - `results/`: Output figures and tables
