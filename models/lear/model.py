@@ -69,3 +69,60 @@ def rolling_lear(df, feature_cols, target_col, calibration_window, test_days):
         forecasts.loc[date], lambdas.loc[date] = fit_predict_lear(df_train, df_test_day, feature_cols, target_col)
 
     return forecasts, lambdas
+
+
+@ignore_warnings(category=ConvergenceWarning)
+def fit_coefs_lear(df_train, feature_cols, target_col):
+    """
+    Same logic as above, but to implement Lion's advice from the final colloqium:
+    Instead of forecasts, it gives me a boolean mask for each data point telling me
+    which predictors were selected
+    """
+    n_features = len(feature_cols)
+    selected = np.zeros((24, n_features), dtype=bool)
+
+    for h in range(24):
+        train_h = df_train[df_train.index.hour== h]
+        X_train = train_h[feature_cols].values
+        Y_train = train_h[target_col].values
+
+        try:
+            lmbd_model = LassoLarsIC(criterion='aic', max_iter=2500)
+            lmbd = lmbd_model.fit(X_train, Y_train).alpha_
+        except ValueError:
+            lmbd_model =  LassoCV(cv=5, max_iter=2500)
+            lmbd = lmbd_model.fit(X_train, Y_train).alpha_
+
+        if lmbd == 0:
+            model = LinearRegression()
+        else:
+            model = Lasso(max_iter= 2500, alpha=lmbd)
+        model.fit(X_train, Y_train)
+        selected[h] = np.abs(model.coef_) > 1e-10
+    return selected
+
+
+def rolling_lear_coefs(df, feature_cols, target_col, calibration_window, test_days):
+    """
+    Rolling-window analogue of rolling_lear for feature selection analysis.
+    Accumulates the selection counts for all features over all data points to tell me
+    how many times a feature was selected overall.
+
+    """
+    n_features = len(feature_cols)
+    selected = np.zeros(n_features, dtype=np.int64)
+    total = 0
+    for date in test_days:
+        train_end = date - pd.Timedelta(hours=1)
+        train_start = date - pd.Timedelta(days=calibration_window)
+
+        df_train =df.loc[train_start:train_end]
+        df_test_day = df.loc[date: date + pd.Timedelta(hours=23)]
+
+        if len(df_test_day) < 24:
+            continue
+
+        mask = fit_coefs_lear(df_train, feature_cols, target_col)  # (24, n_features)
+        selected += mask.sum(axis=0)
+        total += 24
+    return selected, total

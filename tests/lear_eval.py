@@ -219,3 +219,6 @@ for col in es_forecast_cols:
     p_lear = es_full.loc[common_idx, col].values.reshape(-1, 24)
     p_value = DM(p_real=p_real, p_pred_1=p_bench, p_pred_2=p_lear, norm=1, version='multivariate')
     print(f'{col}: p-value = {p_value:.100f}')
+
+
+
