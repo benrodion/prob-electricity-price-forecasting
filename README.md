@@ -60,6 +60,7 @@ Create a `.env` file in the `config/` directory (create the directory if it does
 ```
 API_KEY=your_entsoe_api_key_here
 ```
+Make sure you are working with `python=3.11` to avoid any dependency clashes.
 
 ## Usage
 
@@ -100,7 +101,17 @@ The project is structured as a pipeline. Run the scripts in the following order:
    python visualization/qra_viz.py
    ```
 
-**Note**: Some scripts may take significant time to run, especially data download (around 15-20 min. per script), model training and forecasting (QRA can take multiple hours, depending on your devices computing power).
+**Note 1**: Some scripts may take significant time to run, especially data download (around 15-20 min. per script), model training and forecasting (QRA can take multiple hours, depending on your devices computing power).
+
+**Note 2**: To use the `epftoolbox`, please use the following instructions:
+```
+$ git clone https://github.com/jeslago/epftoolbox.git
+$ cd epftoolbox 
+conda create --name epftoolbox python=3.10 # optional
+conda activate epftoolbox # optional 
+$ pip install .
+```
+For more, check out the [documentation](https://github.com/jeslago/epftoolbox/tree/master)
 
 ## Results
 
